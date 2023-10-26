@@ -1,0 +1,4 @@
+
+axon:
+  axonserver:
+    context: things-one
