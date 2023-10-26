@@ -4,7 +4,7 @@ I have a REST client that wants, unlike me, to tell an endpoint to create an ent
 It wants the response to be an up-to-date representation of the entity. 
 
 I have looked at https://github.com/AxonIQ/code-samples/tree/main/subscription-query-rest and ported it to Kotlin.
-My implementation is in this package, example.
+My implementation is in this project.
 
 In this example:
 - a [Thing](src/main/kotlin/com/things/one/query/Thing.kt) is what we are trying to define 
