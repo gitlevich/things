@@ -4,19 +4,10 @@ val axonVersion: String by project
 val inspectorAxonVersion: String by project
 val jupiterVersion: String by project
 val assertjVersion: String by project
-val awaitilityVersion: String by project
 val mockkVersion: String by project
-val springMockkVersion: String by project
-val jacocoToolVersion: String by project
-val springDocOpenapiVersion: String by project
-val hikariVersion: String by project
-val h2Version: String by project
 val reactorCoreVersion: String by project
 val kotlinVersion: String by project
-val kotlinSerializationVersion: String by project
-val exposedVersion: String by project
 val reactorKotlinExt: String by project
-val testcontainersVersion: String by project
 
 plugins {
     val kotlinGradlePluginVersion = "1.9.10"
@@ -62,7 +53,6 @@ dependencies {
 dependencyManagement {
     imports {
         mavenBom("org.axonframework:axon-bom:${extra["axonVersion"]}")
-        mavenBom("org.testcontainers:testcontainers-bom:${extra["testcontainersVersion"]}")
         mavenBom("org.springframework.boot:spring-boot-dependencies:3.1.5") {
             bomProperty("kotlin.version", "1.9.10")
         }
