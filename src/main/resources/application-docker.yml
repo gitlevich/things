@@ -21,7 +21,7 @@ axon:
     packages:
       - com.things.one
   axonserver:
-    servers: axonserver
+    servers: localhost
     context: things
 
     management:

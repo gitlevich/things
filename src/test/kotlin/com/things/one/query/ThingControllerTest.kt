@@ -14,8 +14,8 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import reactor.kotlin.core.publisher.toMono
 import java.util.UUID
 
-@WebFluxTest(controllers = [ThingsController::class])
-internal class ThingsControllerTest {
+@WebFluxTest(controllers = [ThingController::class])
+internal class ThingControllerTest {
 
     @Autowired
     private lateinit var client: WebTestClient

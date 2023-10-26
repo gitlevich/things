@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono
 
 @RestController
 @RequestMapping(path = ["/api/thing/query"], produces = [MediaType.APPLICATION_JSON_VALUE])
-class ThingsController(private val thingService: ThingService) {
+class ThingController(private val thingService: ThingService) {
 
     @PostMapping("/one")
     fun defineThingOneWay(@RequestBody spec: ThingSpec): Mono<Thing> =

@@ -20,6 +20,10 @@ class ThingService(
     private val randomUUID: () -> UUID = { UUID.randomUUID() }
 ) {
 
+    /**
+     * Like in the Java example, attempts to use command correlation id and the respective [FindThingByCorrelationId]
+     * query.
+     */
     fun defineThing(thingSpec: ThingSpec): Mono<Thing> {
         val command = GenericCommandMessage.asCommandMessage<Any>(DefineThingCommand(randomUUID(), thingSpec.purpose))
         val query = FindThingByCorrelationId(command.identifier)
@@ -29,6 +33,9 @@ class ThingService(
             .flatMap { it.thing.toMono() }
     }
 
+    /**
+     * Just for completeness, attempts to create the Thing via another query, [FindThingById].
+     */
     fun defineThingDifferently(thingSpec: ThingSpec): Mono<Thing> {
         val command = DefineThingCommand(randomUUID(), thingSpec.purpose)
         val query = FindThingById(command.thingId)

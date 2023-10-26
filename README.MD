@@ -7,27 +7,26 @@ I have looked at https://github.com/AxonIQ/code-samples/tree/main/subscription-q
 My implementation is in this project.
 
 In this example:
-- a [Thing](src/main/kotlin/com/things/one/query/Thing.kt) is what we are trying to define 
-- [ThingServiceOne](src/main/kotlin/com/things/one/query/ThingServiceOne.kt) is a literal port of the Java example in the axon-examples project. 
-- [ThingServiceTwo](src/main/kotlin/com/things/one/query/ThingServiceTwo.kt) is the equivalent of my current implementation.
+- Command model: just a lonely [TheThing](src/main/kotlin/com/things/one/command/TheThing.kt) aggregate.
+- Query model:
+  - a [Thing](src/main/kotlin/com/things/one/query/Thing.kt) is what we are trying to define 
+  - [ThingService](src/main/kotlin/com/things/one/query/ThingService.kt) is a literal port of the subscription query 
+     Java example in the axon-examples project.
+  - [ThingProjection](src/main/kotlin/com/things/one/query/ThingProjection.kt) is a projection.
+  - [ThingController](src/main/kotlin/com/things/one/query/ThingController.kt) is a REST controller that uses the 
+    ThingService to demonstrate the problem.
 
-Neither works:
-- the tests [ThingServiceOneTest](src/test/kotlin/com/things/one/query/ThingServiceOneTest.kt) 
-     and [ThingServiceTwoTest](src/test/kotlin/com/things/one/query/ThingServiceTwoTest.kt) fail. Both are disabled
-     for that reason.
-- hitting the REST endpoint with curl fails for both implementations as well.
+The service can be exercised in two ways:
+- by running the test [ThingServiceTest](src/test/kotlin/com/things/one/query/ThingServiceTest.kt) that fails
+  and is disabled to get the project to build.
+- by hitting the REST endpoint with curl fails for both implementations as well (see below).
 
-I would like help to get either to work.
+Both ways fail with this error:
+```log
+java.util.concurrent.TimeoutException: Did not observe any item or terminal signal within 5000ms in 'source(FluxConcatArray)' (and no fallback has been configured)
+```
 
-This is the first time I implemented a projection properly, see [ThingProjection.kt](src/main/kotlin/com/things/one/query/ThingProjection.kt). For some
-reason, while I have understood the concept for a long time, I never implemented it right with Axon. Weird.
-
-Before, I just had **projectors** in each of my services that projected events to a local store, translating them to
-the service-local model. I used subscription queries only in the case like this, but my implementation was somewhat
-different, and it worked. [ThingsServiceOne](src/main/kotlin/com/things/one/query/ThingServiceOne.kt) is identical
-to my working implementation. For some reason, I can't get it to work in this example.
-
-I would like to understand what I am doing wrong in the "Thing" implementation in the accompanying code. 
+I need help to get either to work.
 
 # To run:
 
@@ -39,7 +38,7 @@ In the project root execute:
 
 # To test:
 
-Axon example version:
+Axon example version (query by command correlation id):
 
 ```shell
 curl -X "POST" "http://localhost:8080/api/thing/query/one" \
@@ -50,7 +49,7 @@ curl -X "POST" "http://localhost:8080/api/thing/query/one" \
 ```
  and 
 
-My old version:
+Same, but tries to use another query, by aggregate id:
 
 ```shell
 curl -X "POST" "http://localhost:8080/api/thing/query/two" \
