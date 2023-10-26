@@ -13,7 +13,7 @@ spring:
   datasource:
     username: things
     password: things
-    url: jdbc:localhost://postgres:5432/things
+    url: jdbc:postgresql://postgres:5432/things
     driver-class-name: org.postgresql.Driver
 
 axon:
@@ -21,7 +21,7 @@ axon:
     packages:
       - com.things.one
   axonserver:
-    servers: localhost
+    servers: axonserver
     context: things
 
     management:
@@ -36,12 +36,3 @@ axon:
           probes:
             enabled: true
 
-logging:
-  pattern:
-    console: "%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
-  level:
-    root: warn
-    com.things: debug
-    org.axonframework: warn
-    reactor.core: warn
-    org.junit: error

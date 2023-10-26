@@ -1,14 +1,13 @@
 package com.things.one.query
 
-import example.FindThingByCorrelationId
-import example.ThingServiceOne
-import example.thing
-import example.thingSpec
+import com.things.one.api.FindThingByCorrelationId
+import com.things.one.api.FindThingById
 import io.mockk.every
 import io.mockk.mockk
 import org.axonframework.commandhandling.gateway.CommandGateway
 import org.axonframework.queryhandling.QueryGateway
 import org.axonframework.queryhandling.SubscriptionQueryResult
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -21,14 +20,15 @@ import java.time.Duration
  *
  * I am obviously doing something very wrong because this test fails with a timeout.
  */
-class ThingServiceOneTest {
+//@Disabled("Fails")
+class ThingServiceTest {
 
     private val queryGateway: QueryGateway = mockk(relaxed = true)
     private val commandGateway: CommandGateway = mockk(relaxed = true)
-    private val thingService = ThingServiceOne(commandGateway, queryGateway)
+    private val thingService = ThingService(commandGateway, queryGateway)
 
     @Test
-    fun `subscribe-create-getUpdate sequence wanted by REST client should work according to Axon recipe`() {
+    fun `subscribe-create-getUpdate sequence wanted by REST client should work according to Axon recipe - FindThingByCorrelationId`() {
         val subscriptionQueryResult =
             mockk<SubscriptionQueryResult<Any, FindThingByCorrelationId.Response>>(relaxed = true)
         every { subscriptionQueryResult.initialResult() } returns Mono.just(FindThingByCorrelationId.Response(null))
@@ -41,9 +41,30 @@ class ThingServiceOneTest {
             )
         } returns subscriptionQueryResult
 
-        StepVerifier.create(thingService.defineThingAnotherWay(thingSpec))
+        StepVerifier.create(thingService.defineThing(thingSpec))
             .expectSubscription()
-            .expectNext(FindThingByCorrelationId.Response(thing))
+            .expectNext(thing)
+            .expectComplete()
+            .verify(Duration.ofSeconds(5))
+    }
+
+    @Test
+    fun `subscribe-create-getUpdate sequence wanted by REST client should work according to Axon recipe - FindThingById`() {
+        val subscriptionQueryResult =
+            mockk<SubscriptionQueryResult<Any, FindThingById.Response>>(relaxed = true)
+        every { subscriptionQueryResult.initialResult() } returns Mono.just(FindThingById.Response(null))
+        every { subscriptionQueryResult.updates() } returns Flux.just(FindThingById.Response(thing))
+        every {
+            queryGateway.subscriptionQuery(
+                any<FindThingById>(),
+                Any::class.java,
+                FindThingById.Response::class.java
+            )
+        } returns subscriptionQueryResult
+
+        StepVerifier.create(thingService.defineThingDifferently(thingSpec))
+            .expectSubscription()
+            .expectNext(thing)
             .expectComplete()
             .verify(Duration.ofSeconds(5))
     }

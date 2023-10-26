@@ -1,5 +1,10 @@
-package example
+package com.things.one.query
 
+import com.things.one.api.FindThingByCorrelationId
+import com.things.one.api.FindThingById
+import com.things.one.api.ThingDefinedEvent
+import com.things.one.query.Thing
+import com.things.one.util.WithLoggingMessageInterceptor
 import org.axonframework.config.ProcessingGroup
 import org.axonframework.eventhandling.EventHandler
 import org.axonframework.messaging.annotation.MetaDataValue
@@ -9,7 +14,7 @@ import org.springframework.stereotype.Component
 
 @ProcessingGroup("things")
 @Component
-class ThingProjection(val emitter: QueryUpdateEmitter) {
+class ThingProjection(val emitter: QueryUpdateEmitter): WithLoggingMessageInterceptor() {
     private val things = mutableSetOf<Thing>()
 
     @QueryHandler

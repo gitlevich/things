@@ -1,4 +1,4 @@
-package example
+package com.things.one.query
 
 import java.util.*
 

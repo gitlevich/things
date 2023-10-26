@@ -1,0 +1,48 @@
+axoniq:
+  axonserver:
+    autocluster:
+      contexts:
+        - _admin
+        - things
+
+    cluster-template:
+      first: ${LOCAL_AXONSERVER}:8224
+      users:
+      - roles:
+        - context: _admin
+          roles:
+          - ADMIN
+        - context: things
+          roles:
+          - USE_CONTEXT
+        password: 'admin'
+        userName: admin
+
+      replicationGroups:
+      - roles:
+        - role: PRIMARY
+          node: ${LOCAL_AXONSERVER}
+        name: _admin
+        contexts:
+        - name: _admin
+          metaData:
+            event.index-format: JUMP_SKIP_INDEX
+            snapshot.index-format: JUMP_SKIP_INDEX
+      - roles:
+        - role: PRIMARY
+          node: ${LOCAL_AXONSERVER}
+        name: things
+        contexts:
+        - name: things
+          metaData:
+            event.index-format: JUMP_SKIP_INDEX
+            snapshot.index-format: JUMP_SKIP_INDEX
+
+      applications:
+      - token: '2843a447-4da5-4b54-af27-7a8e0d857e00'
+        name: things
+        roles:
+        - roles:
+          - USE_CONTEXT
+          context: things
+        description: ""
