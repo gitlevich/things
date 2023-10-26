@@ -21,11 +21,8 @@ fun main(args: Array<String>) {
 class AppConfig {
 	@Bean
 	fun randomUUID(): () -> UUID = { UUID.randomUUID() }
-
-	@Bean
-	fun clock(): Clock = Clock.systemUTC()
-
 }
+
 @Configuration
 @Profile("!test")
 @Import(AxonServerAutoConfiguration::class)

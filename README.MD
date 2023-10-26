@@ -33,7 +33,7 @@ I need help to get either to work.
 In the project root execute:
 
 ```shell
-`./run.sh`
+./run.sh
 ```
 
 # To test:
